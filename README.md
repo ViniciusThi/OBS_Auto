@@ -1,99 +1,76 @@
 # OBS Auto Recorder
 
-Um aplicativo para controlar o OBS Studio remotamente via websocket, permitindo iniciar e parar gravações automaticamente ou manualmente.
-
-![OBS Auto Recorder](screenshot.png)
-
-## Funcionalidades
-
-- **Controle remoto do OBS Studio** via websocket
-- **Interface gráfica intuitiva** com tema claro de alto contraste
-- **Controle manual** para iniciar e parar gravações
-- **Timer automático** para agendamento de gravações
-- **Monitoramento em tempo real** do status de gravação
-- **Configuração simples** de conexão com o OBS
+Este programa permite controlar o OBS Studio remotamente via websocket para iniciar e parar gravações.
 
 ## Requisitos
 
-- OBS Studio (versão 28.0 ou superior recomendada)
-- Plugin OBS Websocket instalado (incluído por padrão no OBS Studio 28+)
-- Windows 10 ou 11
+- Python 3.6+
+- OBS Studio instalado
+- Plugin obs-websocket instalado no OBS
 
 ## Instalação
 
-### Versão Executável
+1. Instale o OBS Studio usando o instalador em `Executaveis/OBS-Studio-31.1.1-Windows-x64-Installer.exe`
+2. Instale o plugin obs-websocket usando o instalador em `Executaveis/obs-websocket-4.9.1-compat-Qt6-Windows-Installer.exe`
+3. Configure o plugin obs-websocket no OBS Studio:
+   - Abra o OBS Studio
+   - Vá para Ferramentas > WebSocket Server Settings
+   - Ative o servidor websocket
+   - Configure a porta (padrão 4455) 
+   - Configure uma senha (usada no arquivo de configuração)
 
-1. Baixe o arquivo `OBS_Auto_Recorder.exe`
-2. Baixe o arquivo `obs_config.json` (ou crie um novo conforme instruções abaixo)
-3. Coloque ambos os arquivos na mesma pasta
-4. Execute o arquivo `OBS_Auto_Recorder.exe`
+4. Instale as dependências do Python:
+```
+pip install -r requirements.txt
+```
 
-### Configuração do OBS Studio
+## Configuração
 
-1. Abra o OBS Studio
-2. Vá para `Ferramentas > WebSocket Server Settings`
-3. Marque a opção `Enable WebSocket server`
-4. Anote a porta (padrão: 4455)
-5. Se desejar, defina uma senha
-
-### Configuração do OBS Auto Recorder
-
-Edite o arquivo `obs_config.json`:
-
+Edite o arquivo `obs_config.json` com os dados de conexão ao OBS:
 ```json
 {
   "host": "localhost", 
   "port": 4455, 
-  "password": ""
+  "password": "sua_senha"
 }
 ```
 
-- `host`: geralmente "localhost" para conexão local ou o endereço IP do computador com OBS
-- `port`: porta configurada no OBS Websocket (normalmente 4455)
-- `password`: senha do websocket (deixe em branco se não houver senha configurada)
+- `host`: geralmente "localhost" se o OBS e o script estiverem no mesmo computador
+- `port`: porta do websocket configurada no OBS (padrão 4455)
+- `password`: senha configurada no plugin websocket
 
-## Como Usar
+## Uso
 
-### Conexão
+### Versão de Linha de Comando
 
 1. Inicie o OBS Studio
-2. Abra o OBS Auto Recorder
-3. Na aba "Conexão", clique em "Conectar ao OBS"
-4. Verifique o status da conexão
+2. Execute o programa:
+```
+python obs_auto_recorder.py
+```
 
-### Gravação Manual
+3. Use o menu para:
+   - Iniciar gravação
+   - Parar gravação
+   - Verificar status da gravação
+   - Sair do programa
 
-1. Vá para a aba "Gravação"
-2. Clique em "Iniciar Gravação" para começar a gravar
-3. Clique em "Parar Gravação" para finalizar
+### Versão com Interface Gráfica
 
-### Gravação Automática
+1. Inicie o OBS Studio
+2. Execute o programa com interface gráfica:
+```
+python obs_auto_recorder_gui.py
+```
 
-1. Na aba "Gravação", configure a hora de início e fim (formato HH:MM)
-2. Clique em "Ativar Timer"
-3. O programa iniciará e parará a gravação nos horários definidos
-4. Você pode acompanhar o tempo restante na interface
+3. Na interface gráfica você pode:
+   - Conectar/desconectar do OBS
+   - Iniciar/parar gravação
+   - Ver o status da conexão e gravação em tempo real
+   - Configurar as opções de conexão diretamente na interface
 
-## Solução de Problemas
+## Solução de problemas
 
-- **Não consegue conectar?**
-  - Verifique se o OBS está em execução
-  - Confirme se o plugin websocket está ativado
-  - Verifique a porta e senha nas configurações
-
-- **Gravação não inicia?**
-  - Verifique se você está conectado ao OBS
-  - Confirme se o OBS está configurado para gravar (pasta de saída, etc.)
-  - Verifique se há espaço em disco suficiente
-
-## Para Desenvolvedores
-
-O projeto foi desenvolvido em Python usando:
-
-- `tkinter` para a interface gráfica
-- `obsws-python` para comunicação com o OBS Websocket
-- Tema claro e de alto contraste para melhor legibilidade
-
-## Licença
-
-Este projeto está licenciado sob a licença MIT. 
+- Verifique se o OBS está em execução
+- Verifique se o plugin obs-websocket está instalado e configurado
+- Verifique se as configurações no arquivo `obs_config.json` estão corretas 

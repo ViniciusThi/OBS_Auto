@@ -313,6 +313,77 @@ class OBSController:
             time.sleep(0.5)  # Reduz o uso de CPU
         print("Monitoramento de status encerrado")
 
+class AutoCloseMessage:
+    """Classe para mostrar mensagens que fecham automaticamente."""
+    
+    @staticmethod
+    def show_info(title, message, timeout=2000):
+        """Mostra mensagem de informação que fecha automaticamente após timeout (ms)."""
+        root = tk.Toplevel()
+        root.title(title)
+        root.geometry("300x100")
+        root.resizable(False, False)
+        root.configure(bg='white')
+        root.attributes("-topmost", True)
+        
+        # Frame central
+        frame = tk.Frame(root, bg='white', padx=20, pady=10)
+        frame.pack(expand=True, fill='both')
+        
+        # Ícone e mensagem
+        info_label = tk.Label(frame, text="✓", font=("Arial", 16, "bold"), fg="#4CAF50", bg='white')
+        info_label.pack(pady=(5, 0))
+        
+        msg_label = tk.Label(frame, text=message, bg='white', font=("Arial", 10))
+        msg_label.pack(pady=5)
+        
+        # Timer para fechar
+        root.after(timeout, root.destroy)
+        
+        # Centralizar na tela
+        root.update_idletasks()
+        width = root.winfo_width()
+        height = root.winfo_height()
+        x = (root.winfo_screenwidth() // 2) - (width // 2)
+        y = (root.winfo_screenheight() // 2) - (height // 2)
+        root.geometry(f'{width}x{height}+{x}+{y}')
+        
+        return root
+    
+    @staticmethod
+    def show_error(title, message, timeout=2000):
+        """Mostra mensagem de erro que fecha automaticamente após timeout (ms)."""
+        root = tk.Toplevel()
+        root.title(title)
+        root.geometry("300x100")
+        root.resizable(False, False)
+        root.configure(bg='white')
+        root.attributes("-topmost", True)
+        
+        # Frame central
+        frame = tk.Frame(root, bg='white', padx=20, pady=10)
+        frame.pack(expand=True, fill='both')
+        
+        # Ícone e mensagem
+        error_label = tk.Label(frame, text="✗", font=("Arial", 16, "bold"), fg="#F44336", bg='white')
+        error_label.pack(pady=(5, 0))
+        
+        msg_label = tk.Label(frame, text=message, bg='white', font=("Arial", 10))
+        msg_label.pack(pady=5)
+        
+        # Timer para fechar
+        root.after(timeout, root.destroy)
+        
+        # Centralizar na tela
+        root.update_idletasks()
+        width = root.winfo_width()
+        height = root.winfo_height()
+        x = (root.winfo_screenwidth() // 2) - (width // 2)
+        y = (root.winfo_screenheight() // 2) - (height // 2)
+        root.geometry(f'{width}x{height}+{x}+{y}')
+        
+        return root
+
 class OBSControllerGUI:
     def __init__(self, root):
         self.root = root
@@ -544,7 +615,7 @@ class OBSControllerGUI:
     def iniciar_timer(self):
         """Inicia o timer de gravação."""
         if not self.validar_hora(self.hora_inicio.get()) or not self.validar_hora(self.hora_fim.get()):
-            messagebox.showerror("Erro", "Formato de hora inválido. Use HH:MM (exemplo: 09:30)")
+            AutoCloseMessage.show_error("Erro", "Formato de hora inválido. Use HH:MM (exemplo: 09:30)")
             return
         
         if self.timer_running:
@@ -612,9 +683,9 @@ class OBSControllerGUI:
             config = {"host": host, "port": port, "password": password}
             if self.obs.salvar_configuracao(config):
                 self.obs.config = config
-                messagebox.showinfo("Sucesso", "Configuração salva com sucesso!")
+                AutoCloseMessage.show_info("Sucesso", "Configuração salva com sucesso!")
         except ValueError:
-            messagebox.showerror("Erro", "A porta deve ser um número inteiro.")
+            AutoCloseMessage.show_error("Erro", "A porta deve ser um número inteiro.")
     
     def conectar_thread(self):
         """Inicia uma thread para conectar ao OBS."""
@@ -652,11 +723,11 @@ class OBSControllerGUI:
         self.start_button.config(state=tk.NORMAL)
         self.stop_button.config(state=tk.DISABLED)
         self.connection_var.set("Conectado")
-        messagebox.showinfo("Sucesso", "Conectado ao OBS com sucesso!")
+        AutoCloseMessage.show_info("Sucesso", "Conectado ao OBS com sucesso!")
     
     def _mostrar_erro_conexao(self, erro):
         """Mostra mensagem de erro de conexão."""
-        messagebox.showerror("Erro de Conexão", f"Não foi possível conectar ao OBS: {erro}")
+        AutoCloseMessage.show_error("Erro de Conexão", f"Não foi possível conectar ao OBS: {erro}")
     
     def desconectar(self):
         """Desconecta do OBS."""
@@ -700,11 +771,11 @@ class OBSControllerGUI:
         self.start_button.config(state=tk.DISABLED)
         self.stop_button.config(state=tk.NORMAL)
         self.recording_var.set("Gravando")
-        messagebox.showinfo("Sucesso", "Gravação iniciada com sucesso!")
+        AutoCloseMessage.show_info("Sucesso", "Gravação iniciada com sucesso!")
     
     def _mostrar_erro_gravacao(self, erro):
         """Mostra mensagem de erro de gravação."""
-        messagebox.showerror("Erro", f"Erro ao iniciar gravação: {erro}")
+        AutoCloseMessage.show_error("Erro", f"Erro ao iniciar gravação: {erro}")
     
     def parar_gravacao_thread(self):
         """Inicia uma thread para parar a gravação."""
@@ -738,11 +809,11 @@ class OBSControllerGUI:
         self.start_button.config(state=tk.NORMAL)
         self.stop_button.config(state=tk.DISABLED)
         self.recording_var.set("Não está gravando")
-        messagebox.showinfo("Sucesso", "Gravação parada com sucesso!")
+        AutoCloseMessage.show_info("Sucesso", "Gravação parada com sucesso!")
     
     def _mostrar_erro_parar(self, erro):
         """Mostra mensagem de erro ao parar gravação."""
-        messagebox.showerror("Erro", f"Erro ao parar gravação: {erro}")
+        AutoCloseMessage.show_error("Erro", f"Erro ao parar gravação: {erro}")
     
     def atualizar_status(self):
         """Atualiza o status da interface com base no estado do OBS."""
