@@ -1,141 +1,99 @@
 # OBS Auto Recorder
 
-Um programa em Python para automatizar o controle de gravação do OBS Studio com interface gráfica.
+Um aplicativo para controlar o OBS Studio remotamente via websocket, permitindo iniciar e parar gravações automaticamente ou manualmente.
+
+![OBS Auto Recorder](screenshot.png)
 
 ## Funcionalidades
 
-- ✅ Interface gráfica intuitiva
-- ✅ Agendamento de horários de início e parada de gravação
-- ✅ Teste de conexão com OBS Studio
-- ✅ Log de atividades em tempo real
-- ✅ Salvamento automático de configurações
-- ✅ Execução em segundo plano
-- ✅ Agendamento diário automático
+- **Controle remoto do OBS Studio** via websocket
+- **Interface gráfica intuitiva** com tema claro de alto contraste
+- **Controle manual** para iniciar e parar gravações
+- **Timer automático** para agendamento de gravações
+- **Monitoramento em tempo real** do status de gravação
+- **Configuração simples** de conexão com o OBS
 
-## Pré-requisitos
+## Requisitos
 
-1. **Python 3.7 ou superior**
-2. **OBS Studio** instalado e configurado
-3. **OBS WebSocket** plugin instalado no OBS Studio
+- OBS Studio (versão 28.0 ou superior recomendada)
+- Plugin OBS Websocket instalado (incluído por padrão no OBS Studio 28+)
+- Windows 10 ou 11
 
 ## Instalação
 
-### 1. Instalar dependências Python
+### Versão Executável
 
-```bash
-pip install -r requirements.txt
-```
+1. Baixe o arquivo `OBS_Auto_Recorder.exe`
+2. Baixe o arquivo `obs_config.json` (ou crie um novo conforme instruções abaixo)
+3. Coloque ambos os arquivos na mesma pasta
+4. Execute o arquivo `OBS_Auto_Recorder.exe`
 
-### 2. Configurar OBS WebSocket
+### Configuração do OBS Studio
 
 1. Abra o OBS Studio
-2. Vá em **Ferramentas** > **WebSocket Server Settings**
-3. Configure:
-   - **Server Port**: 4455 (padrão)
-   - **Enable Authentication**: Desmarque (ou configure senha se desejar)
-   - **Enable Debug Logging**: Marque para debug
-4. Clique em **OK**
+2. Vá para `Ferramentas > WebSocket Server Settings`
+3. Marque a opção `Enable WebSocket server`
+4. Anote a porta (padrão: 4455)
+5. Se desejar, defina uma senha
 
-## Como usar
+### Configuração do OBS Auto Recorder
 
-### 1. Executar o programa
+Edite o arquivo `obs_config.json`:
 
-```bash
-python obs_auto_recorder.py
+```json
+{
+  "host": "localhost", 
+  "port": 4455, 
+  "password": ""
+}
 ```
 
-### 2. Configurar conexão
+- `host`: geralmente "localhost" para conexão local ou o endereço IP do computador com OBS
+- `port`: porta configurada no OBS Websocket (normalmente 4455)
+- `password`: senha do websocket (deixe em branco se não houver senha configurada)
 
-1. Na seção "Configurações do OBS":
-   - **Host**: localhost (padrão)
-   - **Porta**: 4455 (padrão)
-   - **Senha**: deixe vazio se não configurou autenticação
+## Como Usar
 
-2. Clique em **"Testar Conexão"** para verificar se está funcionando
+### Conexão
 
-### 3. Configurar horários
+1. Inicie o OBS Studio
+2. Abra o OBS Auto Recorder
+3. Na aba "Conexão", clique em "Conectar ao OBS"
+4. Verifique o status da conexão
 
-1. Na seção "Horários de Gravação":
-   - **Iniciar gravação às**: Defina a hora de início (ex: 09:00)
-   - **Parar gravação às**: Defina a hora de parada (ex: 18:00)
+### Gravação Manual
 
-### 4. Iniciar agendamento
+1. Vá para a aba "Gravação"
+2. Clique em "Iniciar Gravação" para começar a gravar
+3. Clique em "Parar Gravação" para finalizar
 
-1. Clique em **"Iniciar Agendamento"**
-2. O programa irá:
-   - Agendar a gravação para o horário especificado
-   - Se o horário já passou hoje, agendará para amanhã
-   - Executar automaticamente todos os dias
+### Gravação Automática
 
-### 5. Monitorar status
-
-- **Status**: Mostra o estado atual do programa
-- **Log**: Exibe todas as atividades e mensagens
-- **Horário atual**: Atualizado em tempo real
-
-## Funcionalidades Avançadas
-
-### Agendamento Inteligente
-
-- Se você definir início às 23:00 e parada às 06:00, o programa entenderá que a parada é no dia seguinte
-- O agendamento se repete automaticamente todos os dias
-- Se o horário de início já passou, agendará para o próximo dia
-
-### Log de Atividades
-
-- Todas as ações são registradas com timestamp
-- Mensagens de sucesso (✓) e erro (✗) são claramente identificadas
-- O log é salvo em tempo real e pode ser consultado a qualquer momento
-
-### Configurações Persistentes
-
-- As configurações de conexão são salvas automaticamente
-- Na próxima execução, os valores serão carregados automaticamente
+1. Na aba "Gravação", configure a hora de início e fim (formato HH:MM)
+2. Clique em "Ativar Timer"
+3. O programa iniciará e parará a gravação nos horários definidos
+4. Você pode acompanhar o tempo restante na interface
 
 ## Solução de Problemas
 
-### Erro de Conexão
+- **Não consegue conectar?**
+  - Verifique se o OBS está em execução
+  - Confirme se o plugin websocket está ativado
+  - Verifique a porta e senha nas configurações
 
-1. Verifique se o OBS Studio está aberto
-2. Confirme se o WebSocket está habilitado
-3. Verifique se a porta está correta (4455)
-4. Teste a conexão usando o botão "Testar Conexão"
+- **Gravação não inicia?**
+  - Verifique se você está conectado ao OBS
+  - Confirme se o OBS está configurado para gravar (pasta de saída, etc.)
+  - Verifique se há espaço em disco suficiente
 
-### Gravação não inicia/para
+## Para Desenvolvedores
 
-1. Verifique se o OBS Studio está em execução
-2. Confirme se não há outra gravação em andamento
-3. Verifique as configurações de saída do OBS
-4. Consulte o log para mensagens de erro específicas
+O projeto foi desenvolvido em Python usando:
 
-### Problemas de Horário
-
-1. Verifique se o relógio do sistema está correto
-2. Confirme se os horários estão no formato correto (HH:MM)
-3. O programa usa o fuso horário local do sistema
-
-## Estrutura de Arquivos
-
-```
-OBSauto/
-├── obs_auto_recorder.py    # Programa principal
-├── requirements.txt        # Dependências Python
-├── README.md              # Este arquivo
-└── obs_config.json        # Configurações salvas (criado automaticamente)
-```
-
-## Tecnologias Utilizadas
-
-- **Python 3.7+**: Linguagem principal
-- **Tkinter**: Interface gráfica
-- **Requests**: Comunicação HTTP com OBS WebSocket
-- **Threading**: Execução em segundo plano
-- **JSON**: Armazenamento de configurações
-
-## Contribuição
-
-Sinta-se à vontade para contribuir com melhorias, correções de bugs ou novas funcionalidades!
+- `tkinter` para a interface gráfica
+- `obsws-python` para comunicação com o OBS Websocket
+- Tema claro e de alto contraste para melhor legibilidade
 
 ## Licença
 
-Este projeto é de código aberto e está disponível sob a licença MIT. 
+Este projeto está licenciado sob a licença MIT. 
