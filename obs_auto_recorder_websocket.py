@@ -16,9 +16,9 @@ class OBSAutoRecorderWebSocket:
         self.root.resizable(False, False)
         
         # Configurações do OBS WebSocket
-        self.obs_host = "localhost"
+        self.obs_host = "192.168.102.26"
         self.obs_port = 4455
-        self.obs_password = ""
+        self.obs_password = "123456"
         
         # Variáveis de controle
         self.recording_thread = None
